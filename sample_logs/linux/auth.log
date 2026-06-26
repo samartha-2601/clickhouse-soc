@@ -1,0 +1,6 @@
+Jul  1 10:12:03 web-server sshd[1234]: Failed password for samartha from 192.168.1.100 port 54211 ssh2
+Jul  1 10:12:08 web-server sshd[1235]: Failed password for samartha from 192.168.1.100 port 54212 ssh2
+Jul  1 10:12:15 web-server sshd[1236]: Failed password for samartha from 192.168.1.100 port 54213 ssh2
+Jul  1 10:12:20 web-server sshd[1237]: Failed password for samartha from 192.168.1.100 port 54214 ssh2
+Jul  1 10:12:24 web-server sshd[1238]: Failed password for samartha from 192.168.1.100 port 54215 ssh2
+Jul  1 10:12:30 web-server sshd[1239]: Accepted password for samartha from 192.168.1.100 port 54216 ssh2

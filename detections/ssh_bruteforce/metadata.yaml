@@ -1,0 +1,15 @@
+id: DET-0001
+
+name: SSH Brute Force
+
+description: Detect repeated failed SSH logins from the same IP.
+
+severity: High
+
+mitre:
+  tactic: Credential Access
+  technique: T1110
+
+author: Samartha Suresh
+
+version: 1.0
