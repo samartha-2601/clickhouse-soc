@@ -85,7 +85,6 @@ An end-to-end SOC platform that simulates enterprise security events, detects th
 
 ```
 
-```
                     Sample Logs
                          │
                          ▼
