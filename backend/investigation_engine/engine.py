@@ -32,6 +32,17 @@ class InvestigationEngine:
     ):
 
         # --------------------------------------------------
+        # Return Existing Investigation (Avoid Duplicates)
+        # --------------------------------------------------
+
+        existing = self.repository.get_investigation(
+            incident_id,
+        )
+
+        if existing is not None:
+            return existing
+
+        # --------------------------------------------------
         # Load Incident
         # --------------------------------------------------
 
