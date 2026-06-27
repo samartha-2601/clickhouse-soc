@@ -4,9 +4,9 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class SecurityEvent(BaseModel):
-    event_id: UUID
+class EventResponse(BaseModel):
 
+    event_id: UUID
     timestamp: datetime
 
     source: str
@@ -17,7 +17,7 @@ class SecurityEvent(BaseModel):
 
     source_ip: str
 
-    destination_ip: str 
+    destination_ip: str
 
     event_type: str
 

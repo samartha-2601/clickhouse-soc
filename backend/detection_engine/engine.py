@@ -1,10 +1,7 @@
-import uuid
-from datetime import datetime
-
 from backend.database.client import get_client
 from backend.database.alert_repository import AlertRepository
 from backend.detection_engine.rule_loader import load_rules
-from backend.models.security_alert import SecurityAlert
+from backend.services.alert_service import AlertService
 
 
 class DetectionEngine:
@@ -13,58 +10,53 @@ class DetectionEngine:
 
         self.client = get_client()
 
-        self.alert_repo = AlertRepository()
+        self.alert_repository = AlertRepository()
+
+        self.alert_service = AlertService()
 
         self.rules = load_rules()
 
     def run(self):
 
-        print(f"Loaded {len(self.rules)} detection rule(s)\n")
+        print("=" * 60)
+        print("Detection Engine")
+        print("=" * 60)
 
         for rule in self.rules:
 
-            print(f"Running: {rule.name}")
+            print(f"\nRunning Rule: {rule.name}")
 
             results = self.client.query(rule.sql)
 
             if not results.result_rows:
 
-                print("No detections.\n")
+                print("No detections.")
 
                 continue
 
-            print(f"Found {len(results.result_rows)} detection(s)\n")
+            print(f"Detections Found: {len(results.result_rows)}")
 
             for row in results.result_rows:
 
                 source_ip = row[0]
+                username = row[1]
+                host = row[2]
+                failures = row[3]
 
-                failures = row[1]
-
-                alert = SecurityAlert(
-
-                    alert_id=uuid.uuid4(),
-
-                    timestamp=datetime.now(),
-
-                    rule_id=rule.id,
-
-                    rule_name=rule.name,
-
-                    severity=rule.severity,
-
-                    mitre_tactic=rule.mitre_tactic,
-
-                    mitre_technique=rule.mitre_technique,
-
-                    status="OPEN",
-
-                    description=(
-                        f"{source_ip} generated "
-                        f"{failures} failed SSH logins."
-                    )
+                alert = self.alert_service.build_alert(
+                    rule=rule,
+                    source_ip=source_ip,
+                    event_count=failures,
+                    username=username,
+                    host=host,
                 )
 
-                self.alert_repo.insert_alert(alert)
+                self.alert_repository.insert_alert(alert)
 
-                print(f"Alert created for {source_ip}")
+                print(
+                    f"Created Alert -> "
+                    f"{alert.rule_name} "
+                    f"({alert.username} @ {alert.host})"
+                )
+
+        print("\nDetection run complete.")
